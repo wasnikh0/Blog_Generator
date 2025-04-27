@@ -1,15 +1,21 @@
 import streamlit as st
 from langchain_community.llms import CTransformers
+from huggingface_hub import hf_hub_download
 
 # -------- Cache model loading --------
 @st.cache_resource
 def load_model():
+    model_path = hf_hub_download(
+        repo_id="TheBloke/Llama-2-7B-Chat-GGUF",
+        filename="llama-2-7b-chat.Q8_0.gguf",
+    )
+
     llm = CTransformers(
-        model="models/llama-2-7b-chat.Q8_0.gguf",   # Path to your .gguf file
+        model=model_path,
         model_type="llama",
         config={
             "max_new_tokens": 256,
-            "temperature": 0.01,
+            "temperature": 0.01
         }
     )
     return llm
